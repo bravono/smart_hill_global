@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRight, Building2, Home, Paintbrush, Briefcase, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Building2, Home, Paintbrush, Briefcase, CheckCircle2, Monitor } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
@@ -45,6 +45,16 @@ const services = [
     color: 'bg-brand-blue/5',
     iconColor: 'text-brand-blue',
   },
+  {
+    id: 'visualization',
+    title: 'Architectural Visualization',
+    icon: Monitor,
+    description: 'Immersive 3D renderings and virtual tours that bring your projects to life before construction.',
+    details: ['3D Rendering', 'Virtual XR Tours', 'BIM Integration'],
+    portfolioUrl: '/portfolio/visualization',
+    color: 'bg-brand-blue/5',
+    iconColor: 'text-brand-accent',
+  },
 ];
 
 export default function ServicesSection() {
@@ -62,7 +72,7 @@ export default function ServicesSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <div 
               key={service.id}

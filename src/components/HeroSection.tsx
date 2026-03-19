@@ -26,11 +26,17 @@ export default function HeroSection() {
           Architecting the future of professional services.
         </p>
         <div className="mt-8 flex gap-4">
-          <button className="px-8 py-4 bg-brand-blue text-[#ffffff] font-semibold rounded-full hover:bg-brand-blue/90 transition-all transform hover:scale-105">
+          <button 
+            onClick={() => window.dispatchEvent(new CustomEvent('open-contact-wizard'))}
+            className="px-8 py-4 bg-brand-blue text-[#ffffff] font-semibold rounded-full hover:bg-brand-blue/90 transition-all transform hover:scale-105 shadow-xl shadow-brand-blue/10"
+          >
             Get Started
           </button>
-          <button className="px-8 py-4 border-2 border-brand-accent text-brand-blue font-semibold rounded-full hover:bg-brand-accent/10 transition-all transform hover:scale-105">
-            Client Portal
+          <button 
+            onClick={() => window.dispatchEvent(new CustomEvent('open-contact-wizard'))}
+            className="px-8 py-4 border-2 border-brand-accent text-brand-blue font-semibold rounded-full hover:bg-brand-accent/10 transition-all transform hover:scale-105"
+          >
+            Book a Consultation
           </button>
         </div>
       </div>

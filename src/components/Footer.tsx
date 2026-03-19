@@ -61,12 +61,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/contact"
+                <button
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-contact-wizard'))}
                   className="hover:text-brand-accent transition-colors"
                 >
                   Contact
-                </Link>
+                </button>
               </li>
             </ul>
           </div>
@@ -104,6 +104,14 @@ export default function Footer() {
                   className="hover:text-brand-accent transition-colors"
                 >
                   Consulting
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/services/visualization"
+                  className="hover:text-brand-accent transition-colors"
+                >
+                  Architectural Visualization
                 </Link>
               </li>
             </ul>

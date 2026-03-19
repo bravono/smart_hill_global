@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X, Sparkles, Calendar, Wand2 } from "lucide-react";
+import ContactWizard from "./ContactWizard";
 
 const services = [
   {
@@ -42,12 +43,28 @@ const services = [
       { name: "Regulatory Compliance", href: "/services/consulting/compliance" },
     ],
   },
+  {
+    name: "Architectural Visualization",
+    href: "/services/visualization",
+    subItems: [
+      { name: "3D Rendering", href: "/services/visualization/3d-rendering" },
+      { name: "Virtual XR Tours", href: "/services/visualization/xr-tours" },
+      { name: "BIM Integration", href: "/services/visualization/bim" },
+    ],
+  },
 ];
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [wizardOpen, setWizardOpen] = useState(false);
+
+  useEffect(() => {
+    const handleWizardOpen = () => setWizardOpen(true);
+    window.addEventListener('open-contact-wizard', handleWizardOpen);
+    return () => window.removeEventListener('open-contact-wizard', handleWizardOpen);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -119,7 +136,7 @@ export default function Navbar() {
                   : "opacity-0 scale-95 -translate-y-2 pointer-events-none",
               )}
             >
-              <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
                 {services.map((service) => (
                   <div key={service.name} className="space-y-4">
                     <Link
@@ -151,12 +168,75 @@ export default function Navbar() {
           >
             Portfolio
           </Link>
-          <Link
-            href="/contact"
-            className="px-6 py-2 bg-brand-blue text-white text-sm font-bold rounded-full hover:bg-brand-blue/90 transition-all transform hover:scale-105 active:scale-95"
+          <div 
+            className="relative"
+            onMouseEnter={() => setActiveDropdown("contact")}
+            onMouseLeave={() => setActiveDropdown(null)}
           >
-            Get in Touch
-          </Link>
+            <button
+              className="px-6 py-2 bg-brand-blue text-white text-sm font-bold rounded-full hover:bg-brand-blue/90 transition-all flex items-center gap-2 transform hover:scale-105 active:scale-95"
+            >
+              Get in Touch
+              <ChevronDown size={14} className={cn("transition-transform duration-300", activeDropdown === "contact" && "rotate-180")} />
+            </button>
+
+            <div className={cn(
+              "absolute top-full right-0 mt-2 w-72 bg-white border border-brand-blue/5 rounded-[2rem] shadow-2xl overflow-hidden transition-all duration-300 transform origin-top-right",
+              activeDropdown === "contact" ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+            )}>
+              <div className="p-3 space-y-1">
+                <button 
+                  onClick={() => {
+                    setWizardOpen(true);
+                    setActiveDropdown(null);
+                  }}
+                  className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-brand-blue/5 text-left transition-all group"
+                >
+                  <div className="p-2.5 bg-brand-accent/10 rounded-xl text-brand-blue group-hover:bg-brand-accent group-hover:text-brand-blue transition-colors">
+                    <Wand2 size={20} />
+                  </div>
+                  <div>
+                    <span className="block text-sm font-bold text-brand-blue">Interactive Inquiry</span>
+                    <span className="block text-[10px] uppercase tracking-widest text-brand-blue/40 font-black mt-0.5">Wizard Guide</span>
+                  </div>
+                </button>
+
+                <button 
+                  onClick={() => {
+                    window.dispatchEvent(new CustomEvent('open-contact-wizard'));
+                    setActiveDropdown(null);
+                  }}
+                  className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-brand-blue/5 text-left transition-all group"
+                >
+                  <div className="p-2.5 bg-brand-blue/5 rounded-xl text-brand-blue group-hover:bg-brand-blue group-hover:text-white transition-colors">
+                    <Calendar size={20} />
+                  </div>
+                  <div>
+                    <span className="block text-sm font-bold text-brand-blue">Book Consultation</span>
+                    <span className="block text-[10px] uppercase tracking-widest text-brand-blue/40 font-black mt-0.5">1:1 Discovery</span>
+                  </div>
+                </button>
+
+                <div className="relative">
+                  <button 
+                    disabled
+                    className="w-full flex items-center gap-4 p-4 rounded-2xl opacity-40 grayscale cursor-not-allowed group"
+                  >
+                    <div className="p-2.5 bg-brand-blue/5 rounded-xl text-brand-blue">
+                      <Sparkles size={20} />
+                    </div>
+                    <div>
+                      <span className="block text-sm font-bold text-brand-blue flex items-center gap-2">
+                        AI Assistant 
+                        <span className="text-[9px] bg-brand-accent/20 text-brand-blue px-2 py-0.5 rounded-full font-black uppercase tracking-tighter">Soon</span>
+                      </span>
+                      <span className="block text-[10px] uppercase tracking-widest text-brand-blue/40 font-black mt-0.5">Automated Support</span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Mobile Toggle */}
@@ -222,11 +302,46 @@ export default function Navbar() {
           >
             Portfolio
           </Link>
-          <button className="w-full py-4 bg-brand-blue text-white font-bold rounded-2xl shadow-lg mt-8">
-            Get in Touch
-          </button>
+          <div className="space-y-3 pt-4 border-t border-brand-blue/5">
+            <span className="block text-[10px] font-black uppercase tracking-widest text-brand-blue/30 ml-2">Contact Options</span>
+            <button 
+              onClick={() => {
+                setWizardOpen(true);
+                setMobileMenuOpen(false);
+              }}
+              className="w-full flex items-center gap-4 p-4 bg-brand-blue/5 rounded-2xl text-left border border-brand-blue/5"
+            >
+              <div className="p-2 bg-brand-accent rounded-xl text-brand-blue">
+                <Wand2 size={20} />
+              </div>
+              <span className="font-bold text-brand-blue">Inquiry Wizard</span>
+            </button>
+            <button 
+              onClick={() => {
+                setWizardOpen(true);
+                setMobileMenuOpen(false);
+              }}
+              className="w-full flex items-center gap-4 p-4 bg-brand-blue/5 rounded-2xl text-left border border-brand-blue/5"
+            >
+              <div className="p-2 bg-brand-blue text-white rounded-xl">
+                <Calendar size={20} />
+              </div>
+              <span className="font-bold text-brand-blue">Book Consultation</span>
+            </button>
+            <button 
+              disabled
+              className="w-full flex items-center gap-4 p-4 bg-brand-blue/5 rounded-2xl text-left border border-brand-blue/5 opacity-50 grayscale"
+            >
+              <div className="p-2 bg-brand-blue/10 rounded-xl text-brand-blue">
+                <Sparkles size={20} />
+              </div>
+              <span className="font-bold text-brand-blue">AI Assistant (Soon)</span>
+            </button>
+          </div>
         </div>
       </div>
+
+      <ContactWizard isOpen={wizardOpen} onClose={() => setWizardOpen(false)} />
     </nav>
   );
 }
