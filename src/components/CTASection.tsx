@@ -21,7 +21,7 @@ export default function CTASection() {
                 Ready to discuss your next <span className="text-brand-accent italic">landmark project?</span>
               </h2>
               <p className="text-white/70 text-lg leading-relaxed mb-0">
-                Smarthill Global provides the precision, performance, and visualization tools needed to architectural excellence. Book a meeting with our principal engineers today.
+                Smarthill Global provides the precision, performance, and visualization tools needed for architectural excellence. Contact our principal engineers today.
               </p>
             </div>
 
@@ -29,13 +29,6 @@ export default function CTASection() {
               <button 
                 onClick={() => window.dispatchEvent(new CustomEvent('open-contact-wizard'))}
                 className="px-8 py-5 bg-brand-accent text-brand-blue font-black tracking-widest uppercase rounded-2xl flex items-center justify-center gap-3 hover:translate-y-[-2px] transition-all shadow-xl shadow-brand-accent/20"
-              >
-                Book Consultation
-                <Calendar size={20} />
-              </button>
-              <button 
-                onClick={() => window.dispatchEvent(new CustomEvent('open-contact-wizard'))}
-                className="px-8 py-5 border-2 border-white/20 hover:border-white/40 text-white font-bold rounded-2xl flex items-center justify-center gap-3 hover:bg-white/5 transition-all"
               >
                 Get Started
                 <ArrowRight size={20} />

@@ -316,18 +316,7 @@ export default function Navbar() {
               </div>
               <span className="font-bold text-brand-blue">Inquiry Wizard</span>
             </button>
-            <button 
-              onClick={() => {
-                setWizardOpen(true);
-                setMobileMenuOpen(false);
-              }}
-              className="w-full flex items-center gap-4 p-4 bg-brand-blue/5 rounded-2xl text-left border border-brand-blue/5"
-            >
-              <div className="p-2 bg-brand-blue text-white rounded-xl">
-                <Calendar size={20} />
-              </div>
-              <span className="font-bold text-brand-blue">Book Consultation</span>
-            </button>
+
             <button 
               disabled
               className="w-full flex items-center gap-4 p-4 bg-brand-blue/5 rounded-2xl text-left border border-brand-blue/5 opacity-50 grayscale"
