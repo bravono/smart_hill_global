@@ -41,11 +41,18 @@ export default function ContactWizard({ isOpen, onClose }: ContactWizardProps) {
     email: '',
   });
 
-  // Reset steps when closed
+  // Reset steps and handle body scroll when closed/open
   useEffect(() => {
-    if (!isOpen) {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
       setTimeout(() => setStep(1), 300);
     }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
   }, [isOpen]);
 
   const handleServiceSelect = (serviceId: string) => {
