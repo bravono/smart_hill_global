@@ -4,6 +4,7 @@ import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react';
 import { Scene } from './three/Scene';
 import { OrbitControls } from '@react-three/drei';
+import Link from 'next/link';
 
 export default function HeroSection() {
   return (
@@ -25,13 +26,19 @@ export default function HeroSection() {
           High-performance 3D solutions for modern firms. 
           Architecting the future of professional services.
         </p>
-        <div className="mt-8">
+        <div className="mt-8 flex flex-col sm:flex-row gap-4 items-center justify-center">
           <button 
             onClick={() => window.dispatchEvent(new CustomEvent('open-contact-wizard'))}
-            className="px-8 py-4 bg-brand-blue text-[#ffffff] font-semibold rounded-full hover:bg-brand-blue/90 transition-all transform hover:scale-105 shadow-xl shadow-brand-blue/10"
+            className="px-8 py-4 bg-brand-blue text-[#ffffff] font-semibold rounded-full hover:bg-brand-blue/90 transition-all transform hover:scale-105 shadow-xl shadow-brand-blue/10 min-w-[160px]"
           >
             Get Started
           </button>
+          <Link 
+            href="/login"
+            className="px-8 py-4 bg-white text-brand-blue border border-brand-blue/10 font-semibold rounded-full hover:bg-brand-blue/5 transition-all transform hover:scale-105 shadow-lg min-w-[160px]"
+          >
+            Client Portal
+          </Link>
         </div>
       </div>
     </section>
