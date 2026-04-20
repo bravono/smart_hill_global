@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ChevronDown, Menu, X, Sparkles, Calendar, Wand2 } from "lucide-react";
@@ -11,45 +11,45 @@ const services = [
     name: "Construction",
     href: "/services/construction",
     subItems: [
-      { name: "Residential Complexes", href: "/services/construction/residential" },
-      { name: "Commercial Hubs", href: "/services/construction/commercial" },
-      { name: "Industrial Facilities", href: "/services/construction/industrial" },
+      { name: "Residential Complexes", href: "/services/construction#residential" },
+      { name: "Commercial Hubs", href: "/services/construction#commercial" },
+      { name: "Industrial Facilities", href: "/services/construction#industrial" },
     ],
   },
   {
     name: "Real Estate",
     href: "/services/real-estate",
     subItems: [
-      { name: "Market Analysis", href: "/services/real-estate/market-analysis" },
-      { name: "Property Valuation", href: "/services/real-estate/valuation" },
-      { name: "Investment Advisory", href: "/services/real-estate/advisory" },
+      { name: "Market Analysis", href: "/services/real-estate#market-analysis" },
+      { name: "Property Valuation", href: "/services/real-estate#valuation" },
+      { name: "Investment Advisory", href: "/services/real-estate#advisory" },
     ],
   },
   {
     name: "Interior Design",
     href: "/services/interior-design",
     subItems: [
-      { name: "Space Planning", href: "/services/interior-design/space-planning" },
-      { name: "Material Selection", href: "/services/interior-design/materials" },
-      { name: "Custom Furnishing", href: "/services/interior-design/furnishing" },
+      { name: "Space Planning", href: "/services/interior-design#space-planning" },
+      { name: "Material Selection", href: "/services/interior-design#materials" },
+      { name: "Custom Furnishing", href: "/services/interior-design#furnishing" },
     ],
   },
   {
     name: "Project Consulting",
     href: "/services/consulting",
     subItems: [
-      { name: "Risk Management", href: "/services/consulting/risk-management" },
-      { name: "Feasibility Studies", href: "/services/consulting/feasibility" },
-      { name: "Regulatory Compliance", href: "/services/consulting/compliance" },
+      { name: "Risk Management", href: "/services/consulting#risk-management" },
+      { name: "Feasibility Studies", href: "/services/consulting#feasibility" },
+      { name: "Regulatory Compliance", href: "/services/consulting#compliance" },
     ],
   },
   {
     name: "Architectural Visualization",
     href: "/services/visualization",
     subItems: [
-      { name: "3D Rendering", href: "/services/visualization/3d-rendering" },
-      { name: "Virtual XR Tours", href: "/services/visualization/xr-tours" },
-      { name: "BIM Integration", href: "/services/visualization/bim" },
+      { name: "3D Rendering", href: "/services/visualization#3d-rendering" },
+      { name: "Virtual XR Tours", href: "/services/visualization#xr-tours" },
+      { name: "BIM Integration", href: "/services/visualization#bim" },
     ],
   },
 ];
@@ -59,6 +59,18 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [wizardOpen, setWizardOpen] = useState(false);
+  const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleMouseEnter = (dropdown: string) => {
+    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
+    setActiveDropdown(dropdown);
+  };
+
+  const handleMouseLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 400);
+  };
 
   useEffect(() => {
     const handleWizardOpen = () => setWizardOpen(true);
@@ -75,14 +87,15 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav
-      className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b",
-        isScrolled
-          ? "bg-white/80 backdrop-blur-md border-brand-blue/10 py-3 shadow-sm"
-          : "bg-transparent border-transparent py-5",
-      )}
-    >
+    <>
+      <nav
+        className={cn(
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b",
+          isScrolled
+            ? "bg-white/80 backdrop-blur-md border-brand-blue/10 py-3 shadow-sm"
+            : "bg-transparent border-transparent py-5",
+        )}
+      >
       <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
@@ -114,9 +127,9 @@ export default function Navbar() {
 
           {/* Services Dropdown */}
           <div
-            className="relative group"
-            onMouseEnter={() => setActiveDropdown("services")}
-            onMouseLeave={() => setActiveDropdown(null)}
+            className="relative group py-2"
+            onMouseEnter={() => handleMouseEnter("services")}
+            onMouseLeave={handleMouseLeave}
           >
             <button className="flex items-center gap-1 text-sm font-semibold text-brand-blue/80 hover:text-brand-blue transition-colors">
               Services{" "}
@@ -169,9 +182,9 @@ export default function Navbar() {
             Portfolio
           </Link>
           <div 
-            className="relative"
-            onMouseEnter={() => setActiveDropdown("contact")}
-            onMouseLeave={() => setActiveDropdown(null)}
+            className="relative py-2"
+            onMouseEnter={() => handleMouseEnter("contact")}
+            onMouseLeave={handleMouseLeave}
           >
             <button
               className="px-6 py-2 bg-brand-blue text-white text-sm font-bold rounded-full hover:bg-brand-blue/90 transition-all flex items-center gap-2 transform hover:scale-105 active:scale-95"
@@ -329,8 +342,9 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+      </nav>
 
       <ContactWizard isOpen={wizardOpen} onClose={() => setWizardOpen(false)} />
-    </nav>
+    </>
   );
 }
