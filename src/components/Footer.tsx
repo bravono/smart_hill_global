@@ -62,7 +62,7 @@ export default function Footer() {
               </li>
               <li>
                 <button
-                  onClick={() => window.dispatchEvent(new CustomEvent('open-contact-wizard'))}
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-contact-wizard', { detail: { mode: 'inquiry' } }))}
                   className="hover:text-brand-accent transition-colors"
                 >
                   Contact

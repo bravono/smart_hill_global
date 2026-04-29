@@ -28,7 +28,7 @@ export default function CTASection() {
 
             <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto shrink-0">
               <button 
-                onClick={() => window.dispatchEvent(new CustomEvent('open-contact-wizard'))}
+                onClick={() => window.dispatchEvent(new CustomEvent('open-contact-wizard', { detail: { mode: 'inquiry' } }))}
                 className="px-8 py-5 bg-brand-accent text-brand-blue font-black tracking-widest uppercase rounded-2xl flex items-center justify-center gap-3 hover:translate-y-[-2px] transition-all shadow-xl shadow-brand-accent/20 grow md:grow-0"
               >
                 Get Started

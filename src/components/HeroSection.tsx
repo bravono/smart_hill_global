@@ -28,7 +28,7 @@ export default function HeroSection() {
         </p>
         <div className="mt-8 flex flex-col sm:flex-row gap-4 items-center justify-center">
           <button 
-            onClick={() => window.dispatchEvent(new CustomEvent('open-contact-wizard'))}
+            onClick={() => window.dispatchEvent(new CustomEvent('open-contact-wizard', { detail: { mode: 'inquiry' } }))}
             className="px-8 py-4 bg-brand-blue text-[#ffffff] font-semibold rounded-full hover:bg-brand-blue/90 transition-all transform hover:scale-105 shadow-xl shadow-brand-blue/10 min-w-[160px]"
           >
             Get Started
