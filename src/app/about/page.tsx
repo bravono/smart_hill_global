@@ -24,21 +24,9 @@ const team = [
     image: "/team/placeholder.jpg",
   },
   {
-    name: "Winifred Runor",
-    role: "Secretary",
-    social: { platform: "X", icon: Twitter, url: "#" },
-    image: "/team/placeholder.jpg",
-  },
-  {
     name: "ETA Okon",
     role: "Structural Engineer",
     social: { platform: "LinkedIn", icon: Linkedin, url: "#" },
-    image: "/team/placeholder.jpg",
-  },
-  {
-    name: "Nasir Olalekan",
-    role: "Builder",
-    social: { platform: "Instagram", icon: Instagram, url: "#" },
     image: "/team/placeholder.jpg",
   },
   {
@@ -143,6 +131,13 @@ export default function AboutPage() {
               construction. Our multidisciplinary team combines local expertise
               with global standards to deliver infrastructure that truly
               inspires.
+            </p>
+
+            <p className="text-lg text-brand-blue/70 leading-relaxed font-medium">
+              We also believe in transparency and keeping our clients informed
+              every step of the way. That's why we offer a secure client portal
+              where our clients can track their project in real-time, ensuring
+              they're always up-to-date on the latest developments and progress.
             </p>
 
             <div className="grid grid-cols-2 gap-6 pt-4">
@@ -293,7 +288,11 @@ export default function AboutPage() {
             </h2>
             <button
               onClick={() =>
-                window.dispatchEvent(new CustomEvent("open-contact-wizard"))
+                window.dispatchEvent(
+                  new CustomEvent("open-contact-wizard", {
+                    detail: { mode: "inquiry" },
+                  }),
+                )
               }
               className="px-10 py-5 bg-brand-blue text-white font-black uppercase tracking-widest text-sm rounded-full hover:bg-brand-blue/90 transition-all transform hover:scale-105 active:scale-95 shadow-2xl"
             >
