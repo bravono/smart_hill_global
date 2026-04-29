@@ -5,6 +5,8 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ChevronDown, Menu, X, Sparkles, Calendar, Wand2 } from "lucide-react";
 import ContactWizard from "./ContactWizard";
+import AIAssistant from "./AIAssistant";
+import { createClient } from "@/lib/supabase";
 
 const services = [
   {
@@ -59,7 +61,22 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [wizardOpen, setWizardOpen] = useState(false);
+  const [wizardMode, setWizardMode] = useState<'inquiry' | 'consultation'>('inquiry');
+  const [user, setUser] = useState<any>(null);
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const supabase = createClient();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleMouseEnter = (dropdown: string) => {
     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
@@ -73,9 +90,12 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    const handleWizardOpen = () => setWizardOpen(true);
-    window.addEventListener('open-contact-wizard', handleWizardOpen);
-    return () => window.removeEventListener('open-contact-wizard', handleWizardOpen);
+    const handleWizardOpen = (e: any) => {
+      setWizardMode(e.detail?.mode || 'inquiry');
+      setWizardOpen(true);
+    };
+    window.addEventListener('open-contact-wizard', handleWizardOpen as EventListener);
+    return () => window.removeEventListener('open-contact-wizard', handleWizardOpen as EventListener);
   }, []);
 
   useEffect(() => {
@@ -200,6 +220,7 @@ export default function Navbar() {
               <div className="p-3 space-y-1">
                 <button 
                   onClick={() => {
+                    setWizardMode('inquiry');
                     setWizardOpen(true);
                     setActiveDropdown(null);
                   }}
@@ -216,7 +237,8 @@ export default function Navbar() {
 
                 <button 
                   onClick={() => {
-                    window.dispatchEvent(new CustomEvent('open-contact-wizard'));
+                    setWizardMode('consultation');
+                    setWizardOpen(true);
                     setActiveDropdown(null);
                   }}
                   className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-brand-blue/5 text-left transition-all group"
@@ -232,16 +254,24 @@ export default function Navbar() {
 
                 <div className="relative">
                   <button 
-                    disabled
-                    className="w-full flex items-center gap-4 p-4 rounded-2xl opacity-40 grayscale cursor-not-allowed group"
+                    disabled={!user}
+                    onClick={() => {
+                      // AI Assistant trigger logic
+                      window.dispatchEvent(new CustomEvent('open-ai-assistant'));
+                      setActiveDropdown(null);
+                    }}
+                    className={cn(
+                      "w-full flex items-center gap-4 p-4 rounded-2xl transition-all group",
+                      user ? "hover:bg-brand-blue/5 cursor-pointer" : "opacity-40 grayscale cursor-not-allowed"
+                    )}
                   >
-                    <div className="p-2.5 bg-brand-blue/5 rounded-xl text-brand-blue">
+                    <div className="p-2.5 bg-brand-blue/5 rounded-xl text-brand-blue group-hover:bg-brand-blue group-hover:text-white transition-colors">
                       <Sparkles size={20} />
                     </div>
                     <div>
                       <span className="block text-sm font-bold text-brand-blue flex items-center gap-2">
                         AI Assistant 
-                        <span className="text-[9px] bg-brand-accent/20 text-brand-blue px-2 py-0.5 rounded-full font-black uppercase tracking-tighter">Soon</span>
+                        {!user && <span className="text-[9px] bg-brand-accent/20 text-brand-blue px-2 py-0.5 rounded-full font-black uppercase tracking-tighter">Soon</span>}
                       </span>
                       <span className="block text-[10px] uppercase tracking-widest text-brand-blue/40 font-black mt-0.5">Automated Support</span>
                     </div>
@@ -319,6 +349,7 @@ export default function Navbar() {
             <span className="block text-[10px] font-black uppercase tracking-widest text-brand-blue/30 ml-2">Contact Options</span>
             <button 
               onClick={() => {
+                setWizardMode('inquiry');
                 setWizardOpen(true);
                 setMobileMenuOpen(false);
               }}
@@ -331,20 +362,29 @@ export default function Navbar() {
             </button>
 
             <button 
-              disabled
-              className="w-full flex items-center gap-4 p-4 bg-brand-blue/5 rounded-2xl text-left border border-brand-blue/5 opacity-50 grayscale"
+              onClick={() => {
+                setWizardMode('consultation');
+                setWizardOpen(true);
+                setMobileMenuOpen(false);
+              }}
+              className="w-full flex items-center gap-4 p-4 bg-brand-blue/5 rounded-2xl text-left border border-brand-blue/5"
             >
               <div className="p-2 bg-brand-blue/10 rounded-xl text-brand-blue">
-                <Sparkles size={20} />
+                <Calendar size={20} />
               </div>
-              <span className="font-bold text-brand-blue">AI Assistant (Soon)</span>
+              <span className="font-bold text-brand-blue">Book Consultation</span>
             </button>
           </div>
         </div>
       </div>
       </nav>
 
-      <ContactWizard isOpen={wizardOpen} onClose={() => setWizardOpen(false)} />
+      <ContactWizard 
+        isOpen={wizardOpen} 
+        onClose={() => setWizardOpen(false)} 
+        initialMode={wizardMode}
+      />
+      <AIAssistant />
     </>
   );
 }
