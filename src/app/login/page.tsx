@@ -5,13 +5,21 @@ import { LogIn, Mail, Lock, Loader2 } from 'lucide-react';
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate login
+    
+    // Simple role detection logic
+    const isAdmin = email.toLowerCase().includes('admin');
+    
     setTimeout(() => {
-      window.location.href = '/dashboard';
+      if (isAdmin) {
+        window.location.href = '/admin/dashboard';
+      } else {
+        window.location.href = '/dashboard';
+      }
     }, 1500);
   };
 
@@ -50,6 +58,8 @@ export default function LoginPage() {
                 <input 
                   type="email" 
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@company.com"
                   className="w-full pl-12 pr-4 py-4 rounded-xl border border-brand-blue/10 focus:ring-2 focus:ring-brand-accent focus:border-transparent outline-none transition-all placeholder:text-brand-blue/30"
                 />
