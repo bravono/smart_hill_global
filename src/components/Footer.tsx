@@ -135,6 +135,14 @@ export default function Footer() {
             >
               Terms of Service
             </Link>
+            <a
+              href="https://wa.me/2349023224596"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-brand-accent transition-colors"
+            >
+              Developer Contact
+            </a>
           </div>
         </div>
       </div>
