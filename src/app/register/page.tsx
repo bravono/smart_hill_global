@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { LogIn, Mail, Lock, Loader2, AlertCircle } from "lucide-react";
-import { login } from "./actions";
+import { UserPlus, Mail, Lock, Loader2, AlertCircle, User } from "lucide-react";
+import { signup } from "./actions";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -15,7 +16,7 @@ export default function LoginPage() {
     setError(null);
 
     const formData = new FormData(e.currentTarget);
-    const result = await login(formData);
+    const result = await signup(formData);
 
     if (result?.error) {
       setError(result.error);
@@ -34,11 +35,11 @@ export default function LoginPage() {
 
         <div className="relative z-10 text-center max-w-md">
           <h1 className="text-5xl font-bold text-white mb-6 tracking-tighter">
-            MISSION <span className="text-brand-accent">CONTROL</span>
+            JOIN THE <span className="text-brand-accent">MISSION</span>
           </h1>
           <p className="text-white/60 text-lg leading-relaxed">
-            Access your secure project environment and collaborate with our firm
-            in real-time.
+            Create your account to start collaborating on your projects and
+            access our exclusive services.
           </p>
         </div>
       </div>
@@ -48,10 +49,10 @@ export default function LoginPage() {
         <div className="w-full max-w-sm space-y-8">
           <div className="text-center lg:text-left">
             <h2 className="text-3xl font-bold text-brand-blue tracking-tight">
-              Welcome back
+              Create Account
             </h2>
             <p className="text-brand-blue/60 mt-2">
-              Sign in to your client portal
+              Get started with your client portal
             </p>
           </div>
 
@@ -62,6 +63,27 @@ export default function LoginPage() {
                 <p>{error}</p>
               </div>
             )}
+
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-brand-blue ml-1">
+                Full Name
+              </label>
+              <div className="relative">
+                <User
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-blue/30"
+                  size={18}
+                />
+                <input
+                  name="fullName"
+                  type="text"
+                  required
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="John Doe"
+                  className="w-full pl-12 pr-4 py-4 rounded-xl border border-brand-blue/10 focus:ring-2 focus:ring-brand-accent focus:border-transparent outline-none transition-all placeholder:text-brand-blue/30"
+                />
+              </div>
+            </div>
 
             <div className="space-y-2">
               <label className="text-sm font-semibold text-brand-blue ml-1">
@@ -85,17 +107,9 @@ export default function LoginPage() {
             </div>
 
             <div className="space-y-2">
-              <div className="flex items-center justify-between ml-1">
-                <label className="text-sm font-semibold text-brand-blue">
-                  Password
-                </label>
-                <a
-                  href="#"
-                  className="text-xs font-bold text-brand-accent hover:underline"
-                >
-                  Forgot password?
-                </a>
-              </div>
+              <label className="text-sm font-semibold text-brand-blue ml-1">
+                Password
+              </label>
               <div className="relative">
                 <Lock
                   className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-blue/30"
@@ -120,23 +134,23 @@ export default function LoginPage() {
                 <Loader2 className="animate-spin" size={20} />
               ) : (
                 <>
-                  <LogIn
+                  <UserPlus
                     size={20}
                     className="group-hover:translate-x-1 transition-transform"
                   />
-                  Sign In
+                  Register
                 </>
               )}
             </button>
           </form>
 
           <p className="text-center text-sm text-brand-blue/60">
-            Don't have an account?{" "}
+            Already have an account?{" "}
             <a
-              href="/register"
+              href="/login"
               className="font-bold text-brand-accent hover:underline"
             >
-              Register
+              Sign In
             </a>
           </p>
         </div>

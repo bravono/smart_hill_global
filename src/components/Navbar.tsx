@@ -253,6 +253,40 @@ export default function Navbar() {
               Portfolio
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-accent transition-all duration-300 group-hover:w-full" />
             </Link>
+
+            {user ? (
+              <div className="flex items-center gap-4">
+                <Link
+                  href={
+                    user.email?.toLowerCase().includes("admin")
+                      ? "/admin/dashboard"
+                      : "/dashboard"
+                  }
+                  className="px-6 py-2 bg-brand-blue/5 text-brand-blue text-sm font-bold rounded-full hover:bg-brand-blue/10 transition-all transform hover:scale-105 active:scale-95"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={() => {
+                    import("@/app/login/actions").then(({ logout }) =>
+                      logout(),
+                    );
+                  }}
+                  className="text-sm font-bold text-red-600 hover:text-red-700 transition-colors cursor-pointer"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="relative text-sm font-semibold text-brand-blue/70 hover:text-brand-blue transition-all duration-300 group py-1"
+              >
+                Login
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-accent transition-all duration-300 group-hover:w-full" />
+              </Link>
+            )}
+
             <div
               className="relative py-2"
               onMouseEnter={() => handleMouseEnter("contact")}
@@ -450,6 +484,41 @@ export default function Navbar() {
             >
               Portfolio
             </Link>
+
+            {user ? (
+              <div className="space-y-1">
+                <Link
+                  href={
+                    user.email?.toLowerCase().includes("admin")
+                      ? "/admin/dashboard"
+                      : "/dashboard"
+                  }
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block text-xl font-bold text-brand-blue p-4 hover:bg-brand-blue/5 active:bg-brand-blue/10 active:scale-95 transition-all rounded-2xl"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={() => {
+                    import("@/app/login/actions").then(({ logout }) =>
+                      logout(),
+                    );
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full text-left text-xl font-bold text-red-600 p-4 hover:bg-red-50 active:bg-red-100 active:scale-95 transition-all rounded-2xl"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-xl font-bold text-brand-blue p-4 hover:bg-brand-blue/5 active:bg-brand-blue/10 active:scale-95 transition-all rounded-2xl"
+              >
+                Login
+              </Link>
+            )}
 
             <div className="overflow-hidden pt-4 border-t border-brand-blue/5">
               <button
