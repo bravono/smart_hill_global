@@ -1,8 +1,8 @@
 "use client";
 
 import { notFound } from "next/navigation";
-import { use } from "react";
-import { motion } from "framer-motion";
+import { use, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
   MapPin,
@@ -10,6 +10,8 @@ import {
   ArrowUpRight,
   ChevronRight,
   Maximize2,
+  Play,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { projects, categories } from "@/data/projects";
@@ -22,6 +24,7 @@ interface PageProps {
 export default function ProjectDetailsPage({ params }: PageProps) {
   const { slug } = use(params);
   const project = projects.find((p) => p.slug === slug);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   if (!project) {
     notFound();
@@ -30,6 +33,28 @@ export default function ProjectDetailsPage({ params }: PageProps) {
   const categoryLabel = categories.find(
     (c) => c.id === project.category,
   )?.label;
+
+  // Helper to format video URL to embed URL
+  const getEmbedUrl = (url: string) => {
+    if (!url) return "";
+    const ytRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+    const ytMatch = url.match(ytRegex);
+    if (ytMatch && ytMatch[1]) {
+      return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&mute=0&rel=0`;
+    }
+    const vimeoRegex = /(?:vimeo\.com\/|player\.vimeo\.com\/video\/)([0-9]+)/;
+    const vimeoMatch = url.match(vimeoRegex);
+    if (vimeoMatch && vimeoMatch[1]) {
+      return `https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1`;
+    }
+    return url;
+  };
+
+  const isDirectVideo = (url: string) => {
+    return /\.(mp4|webm|ogg)$/i.test(url);
+  };
+
+  const videoUrl = (project as any).videoUrl;
 
   return (
     <main className="min-h-screen bg-white text-brand-blue pt-20">
@@ -128,6 +153,55 @@ export default function ProjectDetailsPage({ params }: PageProps) {
         </div>
       </section>
 
+      {/* Video Walkthrough Section */}
+      {videoUrl && (
+        <section className="py-24 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-16 text-center max-w-3xl mx-auto">
+              <span className="text-brand-accent font-black uppercase tracking-[0.2em] text-xs mb-4 block">
+                Experience the Project
+              </span>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4 text-brand-blue">
+                Video Walkthrough
+              </h2>
+              <p className="text-brand-blue/60 font-medium">
+                Take an immersive virtual tour and experience the scale, design, and details of {project.title}.
+              </p>
+            </div>
+
+            <div className="relative max-w-5xl mx-auto aspect-video rounded-[2.5rem] overflow-hidden group shadow-2xl border border-brand-blue/5">
+              {/* Thumbnail/Poster */}
+              <img
+                src={project.gallery[0] || project.image}
+                alt="Video Poster"
+                className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+              />
+              {/* Backdrop Tint */}
+              <div className="absolute inset-0 bg-brand-blue/30 group-hover:bg-brand-blue/40 transition-colors duration-500" />
+
+              {/* Pulsing Play Button */}
+              <button
+                onClick={() => setIsVideoOpen(true)}
+                className="absolute inset-0 m-auto w-24 h-24 rounded-full bg-brand-accent text-brand-blue flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 group/btn cursor-pointer"
+              >
+                <Play className="w-8 h-8 fill-current ml-1" />
+                <span className="absolute inset-0 rounded-full bg-brand-accent/30 animate-ping pointer-events-none" />
+              </button>
+
+              {/* Video Info Overlay */}
+              <div className="absolute bottom-8 left-8 right-8 flex items-center justify-between text-white z-10">
+                <div>
+                  <p className="text-xs uppercase tracking-widest font-black text-brand-accent mb-1">
+                    Now Playing
+                  </p>
+                  <p className="text-lg font-bold">{project.title} Tour</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Visual Showcase (Gallery) */}
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -219,6 +293,53 @@ export default function ProjectDetailsPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      {/* Cinematic Video Lightbox Modal */}
+      <AnimatePresence>
+        {isVideoOpen && videoUrl && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md p-4 md:p-8"
+            onClick={() => setIsVideoOpen(false)}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setIsVideoOpen(false)}
+              className="absolute top-6 right-6 z-50 p-3 bg-white/10 hover:bg-brand-accent text-white hover:text-brand-blue rounded-full transition-all duration-300 transform hover:rotate-90 cursor-pointer"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            {/* Video container */}
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="relative w-full max-w-5xl aspect-video rounded-3xl overflow-hidden shadow-2xl border border-white/10"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {isDirectVideo(videoUrl) ? (
+                <video
+                  src={videoUrl}
+                  controls
+                  autoPlay
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <iframe
+                  src={getEmbedUrl(videoUrl)}
+                  className="w-full h-full border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }

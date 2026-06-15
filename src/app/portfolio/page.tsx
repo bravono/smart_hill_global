@@ -136,6 +136,14 @@ function PortfolioContent() {
                       {project.year}
                     </div>
 
+                    {/* Floating Video Badge */}
+                    {(project as any).videoUrl && (
+                      <div className="absolute top-4 left-4 z-20 bg-brand-accent/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[10px] font-black text-brand-blue shadow-sm flex items-center gap-1.5 uppercase tracking-wider">
+                        <PlayCircle className="w-3.5 h-3.5" />
+                        Video Walkthrough
+                      </div>
+                    )}
+
                     {/* Hover Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-brand-blue/90 via-brand-blue/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20 flex items-center justify-center">
                       <div className="w-16 h-16 rounded-full bg-brand-accent/90 backdrop-blur-md flex items-center justify-center transform translate-y-10 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100 text-brand-blue">

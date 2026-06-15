@@ -40,6 +40,7 @@ export const projects = [
       { label: "Completion", value: "95%" },
     ],
     icon: Building2,
+    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   },
   {
     id: 2,
@@ -160,6 +161,7 @@ export const projects = [
       { label: "Duration", value: "24 Months" },
     ],
     icon: Building2,
+    videoUrl: "",
   },
   {
     id: 7,
