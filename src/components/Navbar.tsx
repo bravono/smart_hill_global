@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { ChevronDown, Menu, X, Sparkles, Calendar, Wand2 } from "lucide-react";
 import ContactWizard from "./ContactWizard";
 import AIAssistant from "./AIAssistant";
+import WhatsAppButton from "./WhatsAppButton";
 import { createClient } from "@/lib/supabase";
 
 const services = [
@@ -630,6 +631,7 @@ export default function Navbar() {
         initialMode={wizardMode}
       />
       <AIAssistant />
+      <WhatsAppButton />
     </>
   );
 }
