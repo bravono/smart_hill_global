@@ -16,6 +16,8 @@ import {
 import Link from "next/link";
 import { projects, categories } from "@/data/projects";
 import { cn } from "@/lib/utils";
+import ProjectProcessExplorer from "@/components/ProjectProcessExplorer";
+import ProjectGallerySlider from "@/components/ProjectGallerySlider";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -203,43 +205,10 @@ export default function ProjectDetailsPage({ params }: PageProps) {
       )}
 
       {/* Visual Showcase (Gallery) */}
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">
-              Visual Identity
-            </h2>
-            <p className="text-brand-blue/60 max-w-2xl font-medium">
-              Every detail matters. We approach each project with a commitment
-              to excellence and a vision for the future.
-            </p>
-          </div>
-
-          <div className="columns-1 md:columns-2 gap-8 space-y-8">
-            {project.gallery.map((img, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="relative rounded-3xl overflow-hidden group cursor-none"
-              >
-                <img
-                  src={img}
-                  alt={`${project.title} detail ${idx + 1}`}
-                  className="w-full h-auto transform group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-brand-blue/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <div className="w-12 h-12 rounded-full bg-white text-brand-blue flex items-center justify-center">
-                    <Maximize2 className="w-6 h-6" />
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ProjectGallerySlider gallery={project.gallery} title={project.title} />
+      
+      {/* Project Lifecycle & Process Explorer */}
+      <ProjectProcessExplorer project={project} />
 
       {/* Full Width Impact Image */}
       <section className="h-[60vh] relative overflow-hidden">

@@ -41,6 +41,28 @@ export const projects = [
     ],
     icon: Building2,
     videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    process: [
+      {
+        title: "Concept & Blueprinting",
+        description: "Initial architectural sketches and structural engineering planning for the 65-story towers.",
+        image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1931&auto=format&fit=crop"
+      },
+      {
+        title: "Excavation & Foundation",
+        description: "Deep foundation drilling and structural piling to support the massive load of the skyscrapers.",
+        image: "https://images.unsplash.com/photo-1541888086425-d81bb19240f5?q=80&w=2070&auto=format&fit=crop"
+      },
+      {
+        title: "Superstructure Assembly",
+        description: "Pouring concrete columns and erecting steel floor framing at a rapid pace of one floor every four days.",
+        image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop"
+      },
+      {
+        title: "Interior Fit-out & Handover",
+        description: "Installing double-glazed facade panels, climate control systems, and luxury corporate interiors.",
+        image: "https://images.unsplash.com/photo-1423739160914-5527f51c05d4?q=80&w=2070&auto=format&fit=crop"
+      }
+    ],
   },
   {
     id: 2,
@@ -89,6 +111,23 @@ export const projects = [
       { label: "Design Time", value: "6 Months" },
     ],
     icon: PaintBucket,
+    process: [
+      {
+        title: "Client Consultation & Moodboard",
+        description: "Understanding client lifestyle needs and curation of materials, wood samples, and light palette options.",
+        image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop"
+      },
+      {
+        title: "Bespoke Carpentry & Design",
+        description: "Detailing specifications for the custom natural oak cabinetry and minimalist spatial layouts.",
+        image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=2064&auto=format&fit=crop"
+      },
+      {
+        title: "Installation & Styling",
+        description: "Precise mounting of units, styling with premium linen textiles, and curating warm lighting elements.",
+        image: "https://images.unsplash.com/photo-1617103996702-96ff29b1c467?q=80&w=2064&auto=format&fit=crop"
+      }
+    ],
   },
   {
     id: 4,
