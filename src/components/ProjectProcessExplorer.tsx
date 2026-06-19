@@ -17,33 +17,121 @@ interface ProjectProcessExplorerProps {
     image: string;
     gallery: string[];
     process?: ProcessStep[];
+    category?: string;
   };
 }
 
-const DEFAULT_PHASES = [
-  {
-    title: "Initiation & Site Survey",
-    description: "Initial scoping, site visits, mapping terrain, and establishing project parameters and environmental criteria.",
-  },
-  {
-    title: "Conceptual Design & BIM",
-    description: "Creating detailed 3D architectural renders and integrating BIM modeling for structural integrity.",
-  },
-  {
-    title: "Core Construction Phase",
-    description: "Foundational work, structural frameworks assembly, and installation of prime structural elements.",
-  },
-  {
-    title: "Finishing & Commissioning",
-    description: "Final interior styling, landscaping, safety certification, and key handover to client.",
-  },
-];
+const CATEGORY_PHASES: Record<string, { title: string; description: string }[]> = {
+  construction: [
+    {
+      title: "Site Surveying",
+      description: "Detailed topographical assessment, soil test, boundary mapping, and planning site logistics before breaking ground.",
+    },
+    {
+      title: "DPC works",
+      description: "Damp Proof Course works. Executing the foundation layout, pouring concrete footings, and laying blocks up to DPC level to prevent moisture ingress.",
+    },
+    {
+      title: "Superstructure",
+      description: "Erection of columns, beams, load-bearing walls, lintels, and upper floor slabs to form the core structural skeleton.",
+    },
+    {
+      title: "Roofing",
+      description: "Installing the roof trusses, rafters, purlins, and premium roofing sheets or tiles to fully enclose the structure.",
+    },
+    {
+      title: "Finishing",
+      description: "Internal plastering, plumbing and electrical conduit installations, tiling, painting, and fitting doors, windows, and sanitaries.",
+    },
+  ],
+  "real-estate": [
+    {
+      title: "Market Sourcing",
+      description: "Conducting demographic studies, identifying prime locations, and acquiring land rights.",
+    },
+    {
+      title: "Planning & Approvals",
+      description: "Securing municipal approvals, environmental impact assessments, and structural designs.",
+    },
+    {
+      title: "Construction Phase",
+      description: "Supervising the physical erection of units, civil engineering works, and infrastructure utilities.",
+    },
+    {
+      title: "Interior & Landscaping",
+      description: "Undertaking premium finishing, furnishing show houses, and landscaping common areas.",
+    },
+    {
+      title: "Sales & Handover",
+      description: "Direct marketing, client facility tours, processing deeds, and key handover to property managers.",
+    },
+  ],
+  "interior-design": [
+    {
+      title: "Discovery & Concept",
+      description: "Understanding client lifestyle needs, functional requirements, color preferences, and curating initial moodboards.",
+    },
+    {
+      title: "3D Visualization",
+      description: "Creating high-fidelity 3D renders of rooms, selecting materials, fabrics, lighting, and bespoke furniture.",
+    },
+    {
+      title: "Sourcing & Fabrication",
+      description: "Procuring custom furniture, custom millwork, natural stone, and importing specialized fixtures.",
+    },
+    {
+      title: "Installation & Styling",
+      description: "On-site installation of fittings, final painting, art curation, textile staging, and final reveal.",
+    },
+  ],
+  "consulting": [
+    {
+      title: "Initial Consultation",
+      description: "Defining project objectives, client requirements, budget constraints, and project scope.",
+    },
+    {
+      title: "Feasibility & Research",
+      description: "Conducting technical, financial, and environmental feasibility studies to validate the business case.",
+    },
+    {
+      title: "Project Planning",
+      description: "Designing implementation strategies, risk management frameworks, procurement plans, and scheduling.",
+    },
+    {
+      title: "Monitoring & Advisory",
+      description: "Continuous quality audits, cost control assessments, and reporting to stakeholders during execution.",
+    },
+  ],
+  visualization: [
+    {
+      title: "CAD & 3D Modeling",
+      description: "Importing blueprints and modeling precise 3D architectural volumes, terrain, and exterior facades.",
+    },
+    {
+      title: "Material & Lighting",
+      description: "Applying high-resolution PBR textures and configuring realistic daylight, night, or interior light setups.",
+    },
+    {
+      title: "Rendering & Post-Production",
+      description: "Generating high-resolution drafts, rendering sequences, color grading, and enhancing visual impact in post-processing.",
+    },
+    {
+      title: "Client Delivery",
+      description: "Providing 8K static renders, interactive virtual reality (VR) walkthroughs, and fly-through animations.",
+    },
+  ],
+};
+
+const DEFAULT_PHASES = CATEGORY_PHASES.construction;
 
 export default function ProjectProcessExplorer({ project }: ProjectProcessExplorerProps) {
   // Generate process steps from existing project data if not specified
+  const categoryId = project.category || "construction";
+  const defaultPhasesForCategory = CATEGORY_PHASES[categoryId] || DEFAULT_PHASES;
+
   const rawSteps = project.process && project.process.length > 0
     ? project.process
-    : DEFAULT_PHASES.map((phase, idx) => {
+    : defaultPhasesForCategory.map((phase, idx) => {
         // Fall back to gallery images, or hero image
         const img = project.gallery && project.gallery[idx] 
           ? project.gallery[idx] 
